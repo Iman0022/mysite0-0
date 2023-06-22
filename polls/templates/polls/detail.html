@@ -1,7 +1,22 @@
-<h1>{{ question.question_text }}</h1> 
-<!-- 'question.question_text' looks up objrct then attribute -->
+<!-- <h1>{{ question.question_text }}</h1> 
+this could be commented  'question.question_text' looks up object then attribute
 <ul>
 {% for choice in question.choice_set.all %}
     <li>{{ choice.choice_text }}</li>
 {% endfor %}
-</ul>
+</ul> -->
+
+<form action="{% url 'polls:vote' question.id %}" method="post">
+ <!--if u use mathod="post" when the formis submitted the data is alter server-side  -->
+{% csrf_token %} <!-- used for internal urls-->
+<fieldset>
+    <legend><h1>{{ question.question_text }}</h1></legend>
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    {% for choice in question.choice_set.all %}
+        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+        <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+        <!-- counts the number of loop iterations the 'for' tag has gone through -->
+    {% endfor %}
+</fieldset>
+<input type="submit" value="Vote">
+</form>
